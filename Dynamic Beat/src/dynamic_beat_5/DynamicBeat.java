@@ -1,4 +1,4 @@
-package dynamic_beat_4;
+package dynamic_beat_5;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -20,11 +20,18 @@ public class DynamicBeat extends JFrame {
 		
 		private ImageIcon exitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/exitButtonEntered.png"));
 		private ImageIcon exitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/exitButtonBasic.png"));
+		private ImageIcon startButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/startButtonEntered.png"));
+		private ImageIcon startButtonBasicImage = new ImageIcon(Main.class.getResource("../images/startButtonBasic.png"));
+		private ImageIcon quitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/quitButtonEntered.png"));
+		private ImageIcon quitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/quitButtonBasic.png"));
 		
-		private Image introBackground = new ImageIcon(Main.class.getResource("../images/introBakground(Title).png")).getImage(); // 메인 클래스 위치 기반 -> 사진을 얻어와서 이미지 인스턴스를 introBackground 변수에 초기화 -> 4강에서는 선언만 하는 것이 아닌 바로 다 불러오기로 했음
+		private Image background = new ImageIcon(Main.class.getResource("../images/introBackground(Title).png")).getImage(); // 메인 클래스 위치 기반 -> 사진을 얻어와서 이미지 인스턴스를 background 변수에 초기화 -> 4강에서는 선언만 하는 것이 아닌 바로 다 불러오기로 했음
+		
 		private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png"))); // menuBar 이라는 객체 안에 해당 이미지가 들어가게 된다
 	
 		private JButton exitButton = new JButton(exitButtonBasicImage); // exit 버튼 이미지 추가 -> 가져오기
+		private JButton startButton = new JButton(startButtonBasicImage); // start 버튼 이미지 추가 -> 가져오기
+		private JButton quitButton = new JButton(quitButtonBasicImage); // quit 버튼 이미지 추가 -> 가져오기
  		
 		private int mouseX, mouseY; // 마우스 X, Y 좌표값
 		
@@ -101,6 +108,79 @@ public class DynamicBeat extends JFrame {
 		});
 		
 		add(exitButton); // exit 버튼 넣어두기
+		
+		startButton.setBounds(40, 500, 400, 100);
+		startButton.setBorderPainted(false); // JButton 은 커스터마이징 되어있지 않기 때문에 따로 지정을 해줘야함
+		startButton.setContentAreaFilled(false);
+		startButton.setFocusPainted(false);
+		startButton.addMouseListener(new MouseAdapter() {
+				
+			@Override
+			public void mouseEntered(MouseEvent e) {
+					startButton.setIcon(startButtonEnteredImage); // 마우스가 올라갔을 때 Entered 이미지로 바꾸어줌
+					startButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 마우스 올라갔을 때 손가락 모양으로 바꿔줌
+					Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);
+					buttonEnteredMusic.start();
+			}
+				
+			@Override
+			public void mouseExited(MouseEvent e) {
+				    startButton.setIcon(startButtonBasicImage); // 마우스가 없을 때는 다시 원래 이미지로 돌아옴
+				    startButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 마우스 올라갔을 때 손가락 모양으로 바꿔줌
+			}
+				
+			@Override
+			public void mousePressed(MouseEvent e) { // 클릭했을 때 게임 스타트
+				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
+				buttonEnteredMusic.start();
+				startButton.setVisible(false);
+				quitButton.setVisible(false);
+				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
+			}
+			
+		});
+		
+		add(startButton); // start 버튼 넣어두기
+		
+		quitButton.setBounds(40, 600, 400, 100);
+		quitButton.setBorderPainted(false); // JButton 은 커스터마이징 되어있지 않기 때문에 따로 지정을 해줘야함
+		quitButton.setContentAreaFilled(false);
+		quitButton.setFocusPainted(false);
+		quitButton.addMouseListener(new MouseAdapter() {
+				
+			@Override
+			public void mouseEntered(MouseEvent e) {
+					quitButton.setIcon(quitButtonEnteredImage); // 마우스가 올라갔을 때 Entered 이미지로 바꾸어줌
+					quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 마우스 올라갔을 때 손가락 모양으로 바꿔줌
+					Music buttonEnteredMusic = new Music("buttonEnteredMusi.mp3", false);
+					buttonEnteredMusic.start();
+			}
+				
+			@Override
+			public void mouseExited(MouseEvent e) {
+				    quitButton.setIcon(quitButtonBasicImage); // 마우스가 없을 때는 다시 원래 이미지로 돌아옴
+				    quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 마우스 올라갔을 때 손가락 모양으로 바꿔줌
+			}
+				
+			@Override
+			public void mousePressed(MouseEvent e) { // 클릭했을 때 게임 종료
+				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
+				buttonEnteredMusic.start();
+				try {
+					
+					Thread.sleep(1000); // 1초 정도 있다가 프로그램 종료
+				
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+				
+				System.exit(0);
+			}
+			
+		});
+		
+		add(quitButton); // quit 버튼 넣어두기
+		
 			
 		add(menuBar); // 메뉴바 넣어 두기 -> screenDraw 에서 paintComponents 가 그려준다!
 			
@@ -120,7 +200,7 @@ public class DynamicBeat extends JFrame {
 		}
 
 		public void screenDraw(Graphics g) {
-			g.drawImage(introBackground, 0, 0, null);
+			g.drawImage(background, 0, 0, null);
 			paintComponents(g); // JLabel 등과 같은 것을 JFrame 에 그려주는 역할
 			this.repaint(); // paint 는 JFrame 에서 우리가 원하는 내용을 그려줌 (약속!)
 		}
