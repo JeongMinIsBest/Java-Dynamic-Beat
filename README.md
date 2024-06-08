@@ -1,2 +1,1 @@
-## Java Rhythm Game Project
-
+# Java Rhythm Game Project
